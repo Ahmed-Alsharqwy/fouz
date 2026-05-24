@@ -22,37 +22,317 @@ const Divider = () => (
   </div>
 );
 
-export default function App() {
-  const [form, setForm] = useState({ name: "", brand: "", product: "مكياج", pack: "فيديو واحد - 500 ريال", msg: "" });
+const translations = {
+  ar: {
+    dir: "rtl" as const,
+    nav: {
+      name: "فوز عبدالله",
+      links: [["#about","عني"],["#services","خدماتي"],["#work","أعمالي"],["#pricing","الأسعار"],["#contact","تواصل"]],
+      cta: "احجزي تعاون",
+    },
+    hero: {
+      label: "UGC Creator · Beauty & Lifestyle",
+      name: "فوز عبدالله",
+      location: "مكة المكرمة 🇸🇦",
+      followers: "89K+ متابعة",
+      bio: "أصنع محتوى واقعي وجذاب يساعد البراندات على بناء الثقة وزيادة المبيعات — بأسلوب يحكي قصة حقيقية وليس مجرد إعلان.",
+      cta1: "احجزي تعاون",
+      cta2: "مشاهدة الأعمال",
+    },
+    about: {
+      label: "من أنا",
+      title: "عني",
+      bio: "أنا فوز، صانعة محتوى UGC متخصصة في البيوتي والأزياء واللايف ستايل. أكتب السكربت بنفسي وأركز على التجربة الصادقة والقصة الواقعية — محتواي يخلي البنت تحس إنها تسمع نصيحة من صديقتها.",
+      tags: ["💄 مكياج","👗 تنسيقات ملابس","✨ سكن كير","🌿 صحة نفسية","💪 قوة شخصية"],
+    },
+    services: {
+      label: "ما الذي أقدمه",
+      title: "الخدمات",
+      items: [
+        { t: "تجربة منتجات", i: "✨" },
+        { t: "فيديوهات UGC",  i: "📱" },
+        { t: "Makeup Hacks",  i: "💄" },
+        { t: "Outfit Hacks",  i: "👗" },
+        { t: "تنسيقات أزياء", i: "🧣" },
+        { t: "سكن كير",       i: "🧴" },
+        { t: "مكياج مناسبات", i: "💫" },
+        { t: "Lifestyle",     i: "☕" },
+      ],
+    },
+    work: {
+      label: "من حساباتي",
+      title: "أعمالي",
+      subtitle: "اضغطي على أي فيديو لمشاهدته",
+      ig: "📸 كل الأعمال على إنستقرام",
+      tt: "🎵 تيك توك",
+    },
+    whyme: {
+      label: "مميزاتي",
+      title: "ليش تختاريني؟",
+      items: [
+        { t: "أصالة تبيع",    d: "محتوى واقعي يبني ثقة حقيقية مع الجمهور",      i: "🎯" },
+        { t: "جمهور مستهدف", d: "89K+ بنت في السعودية والخليج مهتمات بالبيوتي", i: "👩" },
+        { t: "جاهز للنشر",   d: "فيديو ممنتج بسكربت مقنع وجودة عالية",          i: "✅" },
+      ],
+    },
+    pricing: {
+      label: "باقات التعاون",
+      title: "الأسعار",
+      single: {
+        title: "فيديو واحد",
+        subtitle: "مثالي للتجربة الأولى",
+        price: "500",
+        currency: "ريال",
+        features: ["فيديو UGC كامل بمونتاج","كتابة السكربت","تعديل مجاني واحد","تسليم خلال أسبوع"],
+        cta: "اختيار الباقة",
+        waMsg: "حابة باقة الفيديو الواحد - 500 ريال",
+      },
+      monthly: {
+        badge: "الأكثر طلباً",
+        title: "باقة شهرية",
+        subtitle: "4 فيديوهات شهرياً",
+        price: "1800",
+        currency: "ريال",
+        saving: "توفير 200 ريال",
+        features: ["4 فيديوهات UGC","خطة محتوى شهرية","أولوية في التصوير","دعم مستمر"],
+        cta: "اختيار الباقة",
+        waMsg: "حابة الباقة الشهرية - 1800 ريال",
+      },
+      note: "لا يشمل تسليم الخام · تعديل مجاني واحد · الدفع مقدم 50%",
+    },
+    workflow: {
+      label: "كيف نبدأ",
+      title: "طريقة العمل",
+      steps: [
+        { t: "كتابة السكربت",  d: "أدرس المنتج وأكتب بأسلوبي" },
+        { t: "تصوير احترافي", d: "إضاءة وجو مناسب (جمعة وسبت)" },
+        { t: "مونتاج جذاب",   d: "قصات ومؤثرات ترند" },
+        { t: "التسليم",       d: "واتساب أو إيميل جاهز للنشر" },
+        { t: "النشر",         d: "إمكانية النشر مع منشن للبراند" },
+      ],
+    },
+    faq: {
+      label: "إجابات سريعة",
+      title: "أسئلة شائعة",
+      items: [
+        { q: "هل تستلمين المنتج؟",         a: "نعم، أستلمه وأصوره عندي بأسلوبي الطبيعي." },
+        { q: "كم مدة الفيديو؟",            a: "30-60 ثانية حسب المنصة." },
+        { q: "هل تنشرين على حسابك؟",       a: "متاح النشر مع منشن للبراند حسب الاتفاق." },
+        { q: "وش الفرق بين UGC والإعلان؟", a: "UGC يبان كتجربة صديقة، الناس تثق فيه أكثر." },
+        { q: "كيف الدفع؟",                 a: "50% مقدم، 50% قبل التسليم. تحويل بنكي أو STC Pay." },
+      ],
+    },
+    contact: {
+      label: "تعاون معي",
+      title: "تواصل معي",
+      subtitle: "أرسلي تفاصيل البراند وأرد خلال ساعات",
+      channels: [
+        { href: "https://wa.me/966546066217",              icon: "💬", label: "واتساب",   value: "00966546066217" },
+        { href: "mailto:fouzzz2024@gmail.com",             icon: "📧", label: "إيميل",    value: "fouzzz2024@gmail.com" },
+        { href: "https://www.instagram.com/fouz.abdullah", icon: "📸", label: "إنستقرام", value: "@fouz.abdullah" },
+        { href: "https://www.tiktok.com/@fouz.abdullah",   icon: "🎵", label: "تيك توك",  value: "@fouz.abdullah" },
+      ],
+      form: {
+        title: "نموذج طلب تعاون",
+        namePlaceholder: "اسمك أو اسم البراند",
+        brandPlaceholder: "حساب البراند @",
+        products: ["مكياج","سكن كير","أزياء","لايف ستايل","أخرى"],
+        packs: ["فيديو واحد - 500 ريال","باقة شهرية - 1800 ريال","غير متأكدة"],
+        msgPlaceholder: "تفاصيل إضافية عن المنتج...",
+        submit: "إرسال عبر واتساب",
+        note: "بالضغط ترسلين البيانات مباشرة على واتساب",
+      },
+    },
+    footer: { subtitle: "UGC Creator · مكة المكرمة" },
+    mobileCta: "💬 احجزي تعاون",
+    waDefault: "مرحبا فوز، حابة أتعاون معاك في محتوى UGC",
+    waForm: (name: string, brand: string, product: string, pack: string, msg: string) =>
+      `طلب تعاون:\nالاسم: ${name}\nالبراند: ${brand}\nالمنتج: ${product}\nالباقة: ${pack}\n\n${msg}`,
+  },
+  en: {
+    dir: "ltr" as const,
+    nav: {
+      name: "Fouz Abdullah",
+      links: [["#about","About"],["#services","Services"],["#work","Work"],["#pricing","Pricing"],["#contact","Contact"]],
+      cta: "Book a Collab",
+    },
+    hero: {
+      label: "UGC Creator · Beauty & Lifestyle",
+      name: "Fouz Abdullah",
+      location: "Makkah 🇸🇦",
+      followers: "89K+ Followers",
+      bio: "I create authentic and engaging content that helps brands build trust and boost sales — through real storytelling, not just ads.",
+      cta1: "Book a Collab",
+      cta2: "View Work",
+    },
+    about: {
+      label: "Who I Am",
+      title: "About Me",
+      bio: "I'm Fouz, a UGC content creator specializing in beauty, fashion, and lifestyle. I write my own scripts and focus on genuine experiences and real stories — my content makes women feel like they're getting advice from a friend.",
+      tags: ["💄 Makeup","👗 Outfit Styling","✨ Skin Care","🌿 Mental Wellness","💪 Personal Growth"],
+    },
+    services: {
+      label: "What I Offer",
+      title: "Services",
+      items: [
+        { t: "Product Review",   i: "✨" },
+        { t: "UGC Videos",       i: "📱" },
+        { t: "Makeup Hacks",     i: "💄" },
+        { t: "Outfit Hacks",     i: "👗" },
+        { t: "Outfit Styling",   i: "🧣" },
+        { t: "Skin Care",        i: "🧴" },
+        { t: "Occasion Makeup",  i: "💫" },
+        { t: "Lifestyle",        i: "☕" },
+      ],
+    },
+    work: {
+      label: "From My Accounts",
+      title: "My Work",
+      subtitle: "Click on any video to watch",
+      ig: "📸 All Work on Instagram",
+      tt: "🎵 TikTok",
+    },
+    whyme: {
+      label: "Why Me",
+      title: "Why Choose Me?",
+      items: [
+        { t: "Authenticity Sells",  d: "Real content that builds genuine trust with the audience",            i: "🎯" },
+        { t: "Targeted Audience",   d: "89K+ women in Saudi Arabia & Gulf interested in beauty",              i: "👩" },
+        { t: "Ready to Publish",    d: "Produced video with compelling script and high quality",              i: "✅" },
+      ],
+    },
+    pricing: {
+      label: "Collaboration Packages",
+      title: "Pricing",
+      single: {
+        title: "Single Video",
+        subtitle: "Perfect for a first try",
+        price: "500",
+        currency: "SAR",
+        features: ["Full UGC video with editing","Script writing","One free revision","Delivery within a week"],
+        cta: "Choose Package",
+        waMsg: "I'm interested in the Single Video Package - SAR 500",
+      },
+      monthly: {
+        badge: "Most Popular",
+        title: "Monthly Package",
+        subtitle: "4 videos per month",
+        price: "1,800",
+        currency: "SAR",
+        saving: "Save SAR 200",
+        features: ["4 UGC videos","Monthly content plan","Priority shooting","Ongoing support"],
+        cta: "Choose Package",
+        waMsg: "I'm interested in the Monthly Package - SAR 1800",
+      },
+      note: "Excludes raw footage · One free revision · 50% upfront payment",
+    },
+    workflow: {
+      label: "How We Start",
+      title: "How It Works",
+      steps: [
+        { t: "Script Writing",      d: "I study the product and write in my style" },
+        { t: "Professional Filming",d: "Proper lighting & atmosphere (Fri–Sat)" },
+        { t: "Engaging Editing",    d: "Trending cuts and effects" },
+        { t: "Delivery",            d: "WhatsApp or email, ready to publish" },
+        { t: "Publishing",          d: "Option to post with brand mention" },
+      ],
+    },
+    faq: {
+      label: "Quick Answers",
+      title: "FAQ",
+      items: [
+        { q: "Do you receive the product?",                    a: "Yes, I receive it and film it in my natural style." },
+        { q: "How long is the video?",                         a: "30–60 seconds depending on the platform." },
+        { q: "Do you post on your account?",                   a: "Posting with brand mention is available based on agreement." },
+        { q: "What's the difference between UGC and an ad?",  a: "UGC looks like a friend's experience — people trust it more." },
+        { q: "How is payment done?",                           a: "50% upfront, 50% before delivery. Bank transfer or STC Pay." },
+      ],
+    },
+    contact: {
+      label: "Collaborate With Me",
+      title: "Contact Me",
+      subtitle: "Send brand details and I'll reply within hours",
+      channels: [
+        { href: "https://wa.me/966546066217",              icon: "💬", label: "WhatsApp", value: "00966546066217" },
+        { href: "mailto:fouzzz2024@gmail.com",             icon: "📧", label: "Email",    value: "fouzzz2024@gmail.com" },
+        { href: "https://www.instagram.com/fouz.abdullah", icon: "📸", label: "Instagram",value: "@fouz.abdullah" },
+        { href: "https://www.tiktok.com/@fouz.abdullah",   icon: "🎵", label: "TikTok",   value: "@fouz.abdullah" },
+      ],
+      form: {
+        title: "Collaboration Request Form",
+        namePlaceholder: "Your name or brand name",
+        brandPlaceholder: "Brand account @",
+        products: ["Makeup","Skin Care","Fashion","Lifestyle","Other"],
+        packs: ["Single Video - SAR 500","Monthly Package - SAR 1800","Not Sure"],
+        msgPlaceholder: "Additional details about the product...",
+        submit: "Send via WhatsApp",
+        note: "By clicking, you send the data directly on WhatsApp",
+      },
+    },
+    footer: { subtitle: "UGC Creator · Makkah" },
+    mobileCta: "💬 Book a Collab",
+    waDefault: "Hi Fouz, I'd like to collaborate with you on UGC content",
+    waForm: (name: string, brand: string, product: string, pack: string, msg: string) =>
+      `Collaboration Request:\nName: ${name}\nBrand: ${brand}\nProduct: ${product}\nPackage: ${pack}\n\n${msg}`,
+  },
+};
 
-  const wa = (m = "مرحبا فوز، حابة أتعاون معاك في محتوى UGC") =>
+type Lang = "ar" | "en";
+
+export default function App() {
+  const [lang, setLang] = useState<Lang>("ar");
+  const [form, setForm] = useState({ name: "", brand: "", product: "", pack: "", msg: "" });
+  const t = translations[lang];
+
+  const toggleLang = () => {
+    setLang(l => l === "ar" ? "en" : "ar");
+    setForm(f => ({ ...f, product: "", pack: "" }));
+  };
+
+  const wa = (m = t.waDefault) =>
     window.open(`https://wa.me/966546066217?text=${encodeURIComponent(m)}`, "_blank");
 
   const send = (e: React.FormEvent) => {
     e.preventDefault();
-    wa(`طلب تعاون:\nالاسم: ${form.name}\nالبراند: ${form.brand}\nالمنتج: ${form.product}\nالباقة: ${form.pack}\n\n${form.msg}`);
+    wa(t.waForm(
+      form.name,
+      form.brand,
+      form.product || t.contact.form.products[0],
+      form.pack   || t.contact.form.packs[0],
+      form.msg
+    ));
   };
 
   return (
-    <div dir="rtl" style={{ fontFamily: "'Cairo', sans-serif", backgroundColor: "#FAF0EC", color: "#1C1410" }}>
+    <div dir={t.dir} style={{ fontFamily: "'Cairo', sans-serif", backgroundColor: "#FAF0EC", color: "#1C1410" }}>
 
       {/* ══ Nav ══ */}
       <nav style={{ background: "rgba(237,216,208,0.88)", backdropFilter: "blur(16px)", borderBottom: "1px solid #DFC4BA", boxShadow: "0 1px 20px rgba(160,100,80,0.08)" }}
         className="fixed top-0 inset-x-0 z-50">
         <div className="max-w-6xl mx-auto px-6 lg:px-10 h-[56px] flex items-center justify-between">
-          <span className="font-bold text-[15px] tracking-wide" style={{ color: "#2A1810" }}>فوز عبدالله</span>
+          <span className="font-bold text-[15px] tracking-wide" style={{ color: "#2A1810" }}>{t.nav.name}</span>
           <div className="hidden md:flex gap-7 text-[12.5px]" style={{ color: "#A08070" }}>
-            {[["#about","عني"],["#services","خدماتي"],["#work","أعمالي"],["#pricing","الأسعار"],["#contact","تواصل"]].map(([h,l])=>(
+            {t.nav.links.map(([h,l])=>(
               <a key={h} href={h} className="hover:text-[#2A1810] transition-colors duration-200">{l}</a>
             ))}
           </div>
-          <button onClick={() => wa()}
-            className="text-[12px] font-semibold px-5 py-[9px] rounded-full transition-all duration-200"
-            style={{ background: "#2A1810", color: "#fff" }}
-            onMouseEnter={e=>(e.currentTarget.style.background="#4A2E20")}
-            onMouseLeave={e=>(e.currentTarget.style.background="#2A1810")}>
-            احجزي تعاون
-          </button>
+          <div className="flex items-center gap-2.5">
+            {/* Language Toggle */}
+            <button onClick={toggleLang}
+              className="text-[11.5px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200"
+              style={{ border: "1px solid #D8BCB2", color: "#6B4A40", background: "rgba(255,255,255,0.5)" }}
+              onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.9)")}
+              onMouseLeave={e=>(e.currentTarget.style.background="rgba(255,255,255,0.5)")}>
+              {lang === "ar" ? "EN" : "عربي"}
+            </button>
+            <button onClick={() => wa()}
+              className="text-[12px] font-semibold px-5 py-[9px] rounded-full transition-all duration-200"
+              style={{ background: "#2A1810", color: "#fff" }}
+              onMouseEnter={e=>(e.currentTarget.style.background="#4A2E20")}
+              onMouseLeave={e=>(e.currentTarget.style.background="#2A1810")}>
+              {t.nav.cta}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -70,26 +350,27 @@ export default function App() {
             >
               <div className="aspect-[3/4] rounded-[28px] overflow-hidden"
                 style={{ boxShadow: "0 20px 60px rgba(150,90,70,0.18)" }}>
-                <img src={`${import.meta.env.BASE_URL}images/fouz-hero.jpg`} alt="فوز عبدالله" className="w-full h-full object-cover" />
+                <img src={`${import.meta.env.BASE_URL}images/fouz-hero.jpg`} alt="Fouz Abdullah" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
             {/* Text */}
             <motion.div
-              initial={{ opacity: 0, x: 24 }}
+              key={lang}
+              initial={{ opacity: 0, x: lang === "ar" ? 24 : -24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="flex-1 text-center lg:text-right"
+              className={`flex-1 text-center ${lang === "ar" ? "lg:text-right" : "lg:text-left"}`}
             >
-              <SectionLabel text="UGC Creator · Beauty & Lifestyle" />
+              <SectionLabel text={t.hero.label} />
               <h1 className="text-[42px] sm:text-[54px] lg:text-[64px] font-bold leading-[1.15] mb-4" style={{ letterSpacing: "-0.5px" }}>
-                فوز عبدالله
+                {t.hero.name}
               </h1>
               <p className="text-[13px] mb-8" style={{ color: "#A08070" }}>
-                مكة المكرمة 🇸🇦 &nbsp;·&nbsp; 89K+ متابعة
+                {t.hero.location} &nbsp;·&nbsp; {t.hero.followers}
               </p>
               <p className="text-[15.5px] leading-[1.95] max-w-lg mx-auto lg:mx-0 mb-10" style={{ color: "#5A3E34" }}>
-                أصنع محتوى واقعي وجذاب يساعد البراندات على بناء الثقة وزيادة المبيعات — بأسلوب يحكي قصة حقيقية وليس مجرد إعلان.
+                {t.hero.bio}
               </p>
 
               {/* CTAs */}
@@ -99,14 +380,14 @@ export default function App() {
                   style={{ background: "#2A1810", color: "#fff" }}
                   onMouseEnter={e=>(e.currentTarget.style.background="#4A2E20")}
                   onMouseLeave={e=>(e.currentTarget.style.background="#2A1810")}>
-                  احجزي تعاون
+                  {t.hero.cta1}
                 </button>
                 <a href="#work"
                   className="text-[13px] font-medium px-8 py-3.5 rounded-full transition-all duration-200"
                   style={{ border: "1px solid #D8BCB2", color: "#5A3E34", background: "rgba(255,255,255,0.5)" }}
                   onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.9)")}
                   onMouseLeave={e=>(e.currentTarget.style.background="rgba(255,255,255,0.5)")}>
-                  مشاهدة الأعمال
+                  {t.hero.cta2}
                 </a>
               </div>
 
@@ -146,15 +427,15 @@ export default function App() {
           <div className="max-w-6xl mx-auto px-6 lg:px-10">
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-28 items-start">
               <div className="lg:w-72 flex-shrink-0">
-                <SectionLabel text="من أنا" />
-                <h2 className="text-[28px] lg:text-[34px] font-bold leading-snug">عني</h2>
+                <SectionLabel text={t.about.label} />
+                <h2 className="text-[28px] lg:text-[34px] font-bold leading-snug">{t.about.title}</h2>
               </div>
               <div className="flex-1">
                 <p className="text-[15.5px] leading-[2.1] mb-8" style={{ color: "#5A3E34" }}>
-                  أنا فوز، صانعة محتوى UGC متخصصة في البيوتي والأزياء واللايف ستايل. أكتب السكربت بنفسي وأركز على التجربة الصادقة والقصة الواقعية — محتواي يخلي البنت تحس إنها تسمع نصيحة من صديقتها.
+                  {t.about.bio}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {["💄 مكياج","👗 تنسيقات ملابس","✨ سكن كير","🌿 صحة نفسية","💪 قوة شخصية"].map(s=>(
+                  {t.about.tags.map(s=>(
                     <span key={s} className="text-[12.5px] px-4 py-2 rounded-full font-medium"
                       style={{ background: "rgba(255,255,255,0.8)", border: "1px solid #E4CABB", color: "#6B4A40" }}>
                       {s}
@@ -174,20 +455,11 @@ export default function App() {
         <FadeIn>
           <div className="max-w-6xl mx-auto px-6 lg:px-10">
             <div className="text-center mb-12">
-              <SectionLabel text="ما الذي أقدمه" />
-              <h2 className="text-[28px] lg:text-[34px] font-bold">الخدمات</h2>
+              <SectionLabel text={t.services.label} />
+              <h2 className="text-[28px] lg:text-[34px] font-bold">{t.services.title}</h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
-              {[
-                { t: "تجربة منتجات", i: "✨" },
-                { t: "فيديوهات UGC",  i: "📱" },
-                { t: "Makeup Hacks",  i: "💄" },
-                { t: "Outfit Hacks",  i: "👗" },
-                { t: "تنسيقات أزياء", i: "🧣" },
-                { t: "سكن كير",       i: "🧴" },
-                { t: "مكياج مناسبات", i: "💫" },
-                { t: "Lifestyle",     i: "☕" },
-              ].map((s, idx) => (
+              {t.services.items.map((s, idx) => (
                 <motion.div
                   key={s.t}
                   initial={{ opacity: 0, y: 12 }}
@@ -214,9 +486,9 @@ export default function App() {
         <FadeIn>
           <div className="max-w-6xl mx-auto px-6 lg:px-10">
             <div className="text-center mb-12">
-              <SectionLabel text="من حساباتي" />
-              <h2 className="text-[28px] lg:text-[34px] font-bold mb-2">أعمالي</h2>
-              <p className="text-[13px]" style={{ color: "#A08070" }}>اضغطي على أي فيديو لمشاهدته</p>
+              <SectionLabel text={t.work.label} />
+              <h2 className="text-[28px] lg:text-[34px] font-bold mb-2">{t.work.title}</h2>
+              <p className="text-[13px]" style={{ color: "#A08070" }}>{t.work.subtitle}</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-3.5 mb-10">
               {[
@@ -257,14 +529,14 @@ export default function App() {
                 style={{ color: "#A08070" }}
                 onMouseEnter={e=>(e.currentTarget.style.color="#2A1810")}
                 onMouseLeave={e=>(e.currentTarget.style.color="#A08070")}>
-                📸 كل الأعمال على إنستقرام
+                {t.work.ig}
               </a>
               <a href="https://www.tiktok.com/@fouz.abdullah" target="_blank"
                 className="text-[12.5px] font-medium transition-colors duration-200"
                 style={{ color: "#A08070" }}
                 onMouseEnter={e=>(e.currentTarget.style.color="#2A1810")}
                 onMouseLeave={e=>(e.currentTarget.style.color="#A08070")}>
-                🎵 تيك توك
+                {t.work.tt}
               </a>
             </div>
           </div>
@@ -278,15 +550,11 @@ export default function App() {
         <FadeIn>
           <div className="max-w-6xl mx-auto px-6 lg:px-10">
             <div className="text-center mb-14">
-              <SectionLabel text="مميزاتي" />
-              <h2 className="text-[28px] lg:text-[34px] font-bold">ليش تختاريني؟</h2>
+              <SectionLabel text={t.whyme.label} />
+              <h2 className="text-[28px] lg:text-[34px] font-bold">{t.whyme.title}</h2>
             </div>
             <div className="grid sm:grid-cols-3 gap-8 lg:gap-12 max-w-4xl mx-auto">
-              {[
-                { t:"أصالة تبيع",    d:"محتوى واقعي يبني ثقة حقيقية مع الجمهور",      i:"🎯" },
-                { t:"جمهور مستهدف", d:"89K+ بنت في السعودية والخليج مهتمات بالبيوتي", i:"👩" },
-                { t:"جاهز للنشر",   d:"فيديو ممنتج بسكربت مقنع وجودة عالية",          i:"✅" },
-              ].map(item=>(
+              {t.whyme.items.map(item=>(
                 <div key={item.t} className="text-center p-7 rounded-2xl transition-all duration-250"
                   style={{ background:"rgba(255,255,255,0.55)", border:"1px solid #EAD8D0" }}
                   onMouseEnter={e=>{ const el=e.currentTarget as HTMLElement; el.style.background="rgba(255,255,255,0.9)"; el.style.boxShadow="0 10px 32px rgba(150,90,70,0.10)"; }}
@@ -308,8 +576,8 @@ export default function App() {
         <FadeIn>
           <div className="max-w-4xl mx-auto px-6 lg:px-10">
             <div className="text-center mb-12">
-              <SectionLabel text="باقات التعاون" />
-              <h2 className="text-[28px] lg:text-[34px] font-bold">الأسعار</h2>
+              <SectionLabel text={t.pricing.label} />
+              <h2 className="text-[28px] lg:text-[34px] font-bold">{t.pricing.title}</h2>
             </div>
             <div className="grid md:grid-cols-2 gap-5">
               {/* Single */}
@@ -319,27 +587,27 @@ export default function App() {
                 onMouseLeave={e=>{ const el=e.currentTarget as HTMLElement; el.style.boxShadow="none"; el.style.background="rgba(255,255,255,0.75)"; }}>
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="font-bold text-[17px]" style={{ color:"#2A1810" }}>فيديو واحد</h3>
-                    <p className="text-[12px] mt-0.5" style={{ color:"#A08070" }}>مثالي للتجربة الأولى</p>
+                    <h3 className="font-bold text-[17px]" style={{ color:"#2A1810" }}>{t.pricing.single.title}</h3>
+                    <p className="text-[12px] mt-0.5" style={{ color:"#A08070" }}>{t.pricing.single.subtitle}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-[32px] font-bold" style={{ color:"#2A1810" }}>500</span>
-                    <span className="text-[13px] mr-1" style={{ color:"#A08070" }}>ريال</span>
+                    <span className="text-[32px] font-bold" style={{ color:"#2A1810" }}>{t.pricing.single.price}</span>
+                    <span className="text-[13px] ml-1" style={{ color:"#A08070" }}>{t.pricing.single.currency}</span>
                   </div>
                 </div>
                 <div className="space-y-2.5 mb-7 text-[13.5px]" style={{ color:"#6B4A40" }}>
-                  {["فيديو UGC كامل بمونتاج","كتابة السكربت","تعديل مجاني واحد","تسليم خلال أسبوع"].map(f=>(
+                  {t.pricing.single.features.map(f=>(
                     <div key={f} className="flex items-center gap-2">
                       <span style={{ color:"#B98A7B" }}>✓</span> {f}
                     </div>
                   ))}
                 </div>
-                <button onClick={()=>wa("حابة باقة الفيديو الواحد - 500 ريال")}
+                <button onClick={()=>wa(t.pricing.single.waMsg)}
                   className="w-full py-3 rounded-full text-[13px] font-semibold transition-all duration-200"
                   style={{ border:"1px solid #D8BCB2", color:"#3E2418", background:"transparent" }}
                   onMouseEnter={e=>{ const el=e.currentTarget; el.style.background="#F5E5DE"; }}
                   onMouseLeave={e=>{ const el=e.currentTarget; el.style.background="transparent"; }}>
-                  اختيار الباقة
+                  {t.pricing.single.cta}
                 </button>
               </div>
 
@@ -349,36 +617,36 @@ export default function App() {
                 onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.boxShadow="0 24px 60px rgba(30,10,5,0.35)"; }}
                 onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.boxShadow="0 20px 50px rgba(30,10,5,0.25)"; }}>
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[11px] font-bold"
-                  style={{ background:"#B98A7B", color:"#fff" }}>الأكثر طلباً</div>
+                  style={{ background:"#B98A7B", color:"#fff" }}>{t.pricing.monthly.badge}</div>
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="font-bold text-[17px]">باقة شهرية</h3>
-                    <p className="text-[12px] mt-0.5" style={{ color:"rgba(255,255,255,0.45)" }}>4 فيديوهات شهرياً</p>
+                    <h3 className="font-bold text-[17px]">{t.pricing.monthly.title}</h3>
+                    <p className="text-[12px] mt-0.5" style={{ color:"rgba(255,255,255,0.45)" }}>{t.pricing.monthly.subtitle}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-[32px] font-bold">1800</span>
-                    <span className="text-[13px] mr-1" style={{ color:"rgba(255,255,255,0.4)" }}>ريال</span>
-                    <p className="text-[11px] mt-0.5" style={{ color:"#C9957F" }}>توفير 200 ريال</p>
+                    <span className="text-[32px] font-bold">{t.pricing.monthly.price}</span>
+                    <span className="text-[13px] ml-1" style={{ color:"rgba(255,255,255,0.4)" }}>{t.pricing.monthly.currency}</span>
+                    <p className="text-[11px] mt-0.5" style={{ color:"#C9957F" }}>{t.pricing.monthly.saving}</p>
                   </div>
                 </div>
                 <div className="space-y-2.5 mb-7 text-[13.5px]" style={{ color:"rgba(255,255,255,0.65)" }}>
-                  {["4 فيديوهات UGC","خطة محتوى شهرية","أولوية في التصوير","دعم مستمر"].map(f=>(
+                  {t.pricing.monthly.features.map(f=>(
                     <div key={f} className="flex items-center gap-2">
                       <span style={{ color:"#C9957F" }}>✓</span> {f}
                     </div>
                   ))}
                 </div>
-                <button onClick={()=>wa("حابة الباقة الشهرية - 1800 ريال")}
+                <button onClick={()=>wa(t.pricing.monthly.waMsg)}
                   className="w-full py-3 rounded-full text-[13px] font-semibold transition-all duration-200"
                   style={{ background:"#fff", color:"#2A1810" }}
                   onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.background="#F0E0D8"; }}
                   onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.background="#fff"; }}>
-                  اختيار الباقة
+                  {t.pricing.monthly.cta}
                 </button>
               </div>
             </div>
             <p className="text-center text-[11.5px] mt-5" style={{ color:"#B09080" }}>
-              لا يشمل تسليم الخام · تعديل مجاني واحد · الدفع مقدم 50%
+              {t.pricing.note}
             </p>
           </div>
         </FadeIn>
@@ -394,16 +662,10 @@ export default function App() {
 
               {/* Steps */}
               <div className="lg:w-1/2">
-                <SectionLabel text="كيف نبدأ" />
-                <h2 className="text-[26px] lg:text-[30px] font-bold mb-9">طريقة العمل</h2>
+                <SectionLabel text={t.workflow.label} />
+                <h2 className="text-[26px] lg:text-[30px] font-bold mb-9">{t.workflow.title}</h2>
                 <div className="space-y-6">
-                  {[
-                    { t:"كتابة السكربت",  d:"أدرس المنتج وأكتب بأسلوبي" },
-                    { t:"تصوير احترافي", d:"إضاءة وجو مناسب (جمعة وسبت)" },
-                    { t:"مونتاج جذاب",   d:"قصات ومؤثرات ترند" },
-                    { t:"التسليم",       d:"واتساب أو إيميل جاهز للنشر" },
-                    { t:"النشر",         d:"إمكانية النشر مع منشن للبراند" },
-                  ].map((s, i) => (
+                  {t.workflow.steps.map((s, i) => (
                     <div key={i} className="flex gap-4 items-start">
                       <span className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5"
                         style={{ background:"#EDD4CA", color:"#6B4A40" }}>{i + 1}</span>
@@ -418,16 +680,10 @@ export default function App() {
 
               {/* FAQ */}
               <div className="lg:w-1/2">
-                <SectionLabel text="إجابات سريعة" />
-                <h2 className="text-[26px] lg:text-[30px] font-bold mb-9">أسئلة شائعة</h2>
+                <SectionLabel text={t.faq.label} />
+                <h2 className="text-[26px] lg:text-[30px] font-bold mb-9">{t.faq.title}</h2>
                 <div className="space-y-2.5">
-                  {[
-                    { q:"هل تستلمين المنتج؟",          a:"نعم، أستلمه وأصوره عندي بأسلوبي الطبيعي." },
-                    { q:"كم مدة الفيديو؟",             a:"30-60 ثانية حسب المنصة." },
-                    { q:"هل تنشرين على حسابك؟",        a:"متاح النشر مع منشن للبراند حسب الاتفاق." },
-                    { q:"وش الفرق بين UGC والإعلان؟",  a:"UGC يبان كتجربة صديقة، الناس تثق فيه أكثر." },
-                    { q:"كيف الدفع؟",                  a:"50% مقدم، 50% قبل التسليم. تحويل بنكي أو STC Pay." },
-                  ].map(f=>(
+                  {t.faq.items.map(f=>(
                     <details key={f.q} className="group rounded-xl overflow-hidden"
                       style={{ border:"1px solid #EAD8D0", background:"rgba(255,255,255,0.65)" }}>
                       <summary className="flex justify-between items-center p-4 text-[14px] font-medium cursor-pointer list-none"
@@ -453,20 +709,14 @@ export default function App() {
         <FadeIn>
           <div className="max-w-5xl mx-auto px-6 lg:px-10">
             <div className="text-center mb-12">
-              <SectionLabel text="تعاون معي" />
-              <h2 className="text-[28px] lg:text-[34px] font-bold mb-2">تواصل معي</h2>
-              <p className="text-[13px]" style={{ color:"#A08070" }}>أرسلي تفاصيل البراند وأرد خلال ساعات</p>
+              <SectionLabel text={t.contact.label} />
+              <h2 className="text-[28px] lg:text-[34px] font-bold mb-2">{t.contact.title}</h2>
+              <p className="text-[13px]" style={{ color:"#A08070" }}>{t.contact.subtitle}</p>
             </div>
-
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
               {/* Info */}
               <div className="lg:w-2/5 space-y-3">
-                {[
-                  { href:"https://wa.me/966546066217",              icon:"💬", label:"واتساب",   value:"00966546066217" },
-                  { href:"mailto:fouzzz2024@gmail.com",             icon:"📧", label:"إيميل",    value:"fouzzz2024@gmail.com" },
-                  { href:"https://www.instagram.com/fouz.abdullah", icon:"📸", label:"إنستقرام", value:"@fouz.abdullah" },
-                  { href:"https://www.tiktok.com/@fouz.abdullah",   icon:"🎵", label:"تيك توك",  value:"@fouz.abdullah" },
-                ].map(c=>(
+                {t.contact.channels.map(c=>(
                   <a key={c.label} href={c.href} target="_blank"
                     className="flex items-center gap-3.5 p-4 rounded-xl transition-all duration-200"
                     style={{ background:"rgba(255,255,255,0.65)", border:"1px solid #EAD8D0" }}
@@ -485,15 +735,15 @@ export default function App() {
               <div className="lg:w-3/5">
                 <form onSubmit={send} className="rounded-2xl p-6 lg:p-8 space-y-4"
                   style={{ background:"rgba(255,255,255,0.75)", border:"1px solid #EAD8D0" }}>
-                  <h3 className="font-bold text-[16px] mb-1" style={{ color:"#2A1810" }}>نموذج طلب تعاون</h3>
+                  <h3 className="font-bold text-[16px] mb-1" style={{ color:"#2A1810" }}>{t.contact.form.title}</h3>
                   <div className="grid sm:grid-cols-2 gap-3">
-                    <input required placeholder="اسمك أو اسم البراند" value={form.name}
+                    <input required placeholder={t.contact.form.namePlaceholder} value={form.name}
                       onChange={e=>setForm({...form,name:e.target.value})}
                       className="w-full h-11 rounded-xl px-4 text-[13px] outline-none transition-all duration-200"
                       style={{ border:"1px solid #E4CABB", background:"rgba(247,235,230,0.6)", color:"#2A1810" }}
                       onFocus={e=>{ const el=e.currentTarget; el.style.borderColor="#C4A090"; el.style.background="rgba(247,235,230,0.9)"; }}
                       onBlur={e=>{ const el=e.currentTarget; el.style.borderColor="#E4CABB"; el.style.background="rgba(247,235,230,0.6)"; }} />
-                    <input required placeholder="حساب البراند @" value={form.brand}
+                    <input required placeholder={t.contact.form.brandPlaceholder} value={form.brand}
                       onChange={e=>setForm({...form,brand:e.target.value})}
                       className="w-full h-11 rounded-xl px-4 text-[13px] outline-none transition-all duration-200"
                       style={{ border:"1px solid #E4CABB", background:"rgba(247,235,230,0.6)", color:"#2A1810" }}
@@ -504,15 +754,15 @@ export default function App() {
                     <select value={form.product} onChange={e=>setForm({...form,product:e.target.value})}
                       className="h-11 rounded-xl px-4 text-[13px] outline-none transition-all duration-200"
                       style={{ border:"1px solid #E4CABB", background:"rgba(247,235,230,0.6)", color:"#2A1810" }}>
-                      <option>مكياج</option><option>سكن كير</option><option>أزياء</option><option>لايف ستايل</option><option>أخرى</option>
+                      {t.contact.form.products.map(p=><option key={p}>{p}</option>)}
                     </select>
                     <select value={form.pack} onChange={e=>setForm({...form,pack:e.target.value})}
                       className="h-11 rounded-xl px-4 text-[13px] outline-none transition-all duration-200"
                       style={{ border:"1px solid #E4CABB", background:"rgba(247,235,230,0.6)", color:"#2A1810" }}>
-                      <option>فيديو واحد - 500 ريال</option><option>باقة شهرية - 1800 ريال</option><option>غير متأكدة</option>
+                      {t.contact.form.packs.map(p=><option key={p}>{p}</option>)}
                     </select>
                   </div>
-                  <textarea rows={4} placeholder="تفاصيل إضافية عن المنتج..." value={form.msg}
+                  <textarea rows={4} placeholder={t.contact.form.msgPlaceholder} value={form.msg}
                     onChange={e=>setForm({...form,msg:e.target.value})}
                     className="w-full rounded-xl p-4 text-[13px] outline-none transition-all duration-200 resize-none"
                     style={{ border:"1px solid #E4CABB", background:"rgba(247,235,230,0.6)", color:"#2A1810" }}
@@ -523,9 +773,9 @@ export default function App() {
                     style={{ background:"#2A1810", color:"#fff" }}
                     onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.background="#4A2E20"; }}
                     onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.background="#2A1810"; }}>
-                    إرسال عبر واتساب
+                    {t.contact.form.submit}
                   </button>
-                  <p className="text-[11px] text-center" style={{ color:"#C0A090" }}>بالضغط ترسلين البيانات مباشرة على واتساب</p>
+                  <p className="text-[11px] text-center" style={{ color:"#C0A090" }}>{t.contact.form.note}</p>
                 </form>
               </div>
             </div>
@@ -537,8 +787,8 @@ export default function App() {
       <footer style={{ borderTop:"1px solid #EDD9D2" }} className="py-8">
         <div className="max-w-6xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            <p className="font-bold text-[14px]" style={{ color:"#2A1810" }}>فوز عبدالله</p>
-            <p className="text-[11.5px]" style={{ color:"#B09080" }}>UGC Creator · مكة المكرمة</p>
+            <p className="font-bold text-[14px]" style={{ color:"#2A1810" }}>{t.nav.name}</p>
+            <p className="text-[11.5px]" style={{ color:"#B09080" }}>{t.footer.subtitle}</p>
           </div>
           <p className="text-[11.5px]" style={{ color:"#B09080" }}>© 2025</p>
         </div>
@@ -549,7 +799,7 @@ export default function App() {
         <button onClick={() => wa()}
           className="w-full h-11 rounded-full text-[13px] font-semibold"
           style={{ background:"#2A1810", color:"#fff", boxShadow:"0 8px 24px rgba(30,10,5,0.3)" }}>
-          💬 احجزي تعاون
+          {t.mobileCta}
         </button>
       </div>
     </div>
