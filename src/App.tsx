@@ -70,7 +70,7 @@ export default function App() {
             >
               <div className="aspect-[3/4] rounded-[28px] overflow-hidden"
                 style={{ boxShadow: "0 20px 60px rgba(150,90,70,0.18)" }}>
-                <img src="/images/fouz-hero.jpg" alt="فوز عبدالله" className="w-full h-full object-cover" />
+                <img src={`${import.meta.env.BASE_URL}images/fouz-hero.jpg`} alt="فوز عبدالله" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 
